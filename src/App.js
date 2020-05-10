@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 import DataList from './Components/DataList'
-
 function App() {
   return (
     <div className="App">
-      <DataList />
+    <DataList />
+   
     </div>
   );
 }

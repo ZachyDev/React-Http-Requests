@@ -1,35 +1,40 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
 class DataList extends Component {
     constructor(props) {
         super(props)
     
         this.state = {
-             companies: [],
-             hasError: ''
+             articles: [],
+             hasError: '',
+             locale: 'en-KE',
+             q: 'health',
+             type: 'headlines',
+             api_key: 'B2B94657B6AD41649D26FFC93E381117'
         }
     }
     componentDidMount(){
-        axios.get('https://my-json-server.typicode.com/ZachyDev/ZachyAPI/companies')
-            .then((response => {
+        const { locale, q, type, api_key } = this.state
+        axios.get(`https://api.breakingapi.com/news?q=${q}&type=${type}&locale=${locale}&api_key=${api_key}`)
+            .then(response =>{
                 console.log(response)
-                this.setState({ companies: response.data })
-            }))
-            .catch((error)=>{
+                this.setState({ articles: response.data.articles })
+            })
+            .catch(error =>{
                 console.log(error)
-                this.setState({ hasError: 'Error in retrieving the data'})
+                this.setState({ hasError: 'Something went wrong!' })
             })
     }
     
     render() {
-        const { companies, hasError } = this.state;
-        const companyList = companies.map(company => <div key = { company.id }><li>{ company.description }</li></div>);
+        const { articles,hasError } = this.state
         return (
-            <div> 
-            List of Companies from ZachyAPI
-            { companyList }
+            <div>
+               {
+                   articles.map(article => <div>{ article.title } <a href= { article.link }> Read more....</a><img src = { article.image_links } /></div>)
+               }
+               { hasError }
             </div>
-            
         )
     }
 }
